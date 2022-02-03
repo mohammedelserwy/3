@@ -1,69 +1,57 @@
-import React, {Component} from 'react';
-import {
-  I18nManager,
-  KeyboardAvoidingView,
-  Modal,
-  Platform,
-  View,
-} from 'react-native';
-import {CommonActions, NavigationContainer} from '@react-navigation/native';
-import {Provider} from 'react-redux';
-import RouterNavigator from './RouterNavigator';
-import {navigationRef, isReadyRef, reset} from './NavigationActions';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {changeLng} from './Config';
-import {Spinner, VectorIcon} from './components/assets/UIComponents';
-import Store from './store';
 
-function AppContainer(props) {
-  return (
-    <Provider store={Store}>
-        <NavigationContainer
-          ref={navigationRef}
-          onReady={() => {
-            isReadyRef.current = true;
-          }}>
-          <KeyboardAvoidingView
-            style={{flex: 1}}
-            behavior={Platform.OS === 'ios' ? 'padding' : null}>
-            <RouterNavigator  />
-          </KeyboardAvoidingView>
-        </NavigationContainer>
-    </Provider>
-  );
-}
+
+import React, { Component } from 'react';
+import { Image, Text, View, Button, TouchableOpacity } from 'react-native';
+import { firstPageStyles } from './components/assets/styles/Styles';
 class App extends Component {
-  state = {lng: false, lang: '', loading: false};
-  async componentDidMount() {
-    let lang = await AsyncStorage.getItem('language');
-    if (lang) {
-      this.setState({lng: true, lang: lang});
-      changeLng(lang);
-    } else {
-      this.setState({lng: true});
-    }
-    Store.subscribe(() => {
-      const storeState = Store.getState();
-      if (storeState.mainR.loading) {
-        this.setState({loading: true});
-      } else {
-        this.setState({loading: false});
-      }
-    });
-  }
   render() {
-    const {lng, lang, loading} = this.state;
-    if (lng) {
-      return (
-        <View style={{flex: 1}}>
-          <AppContainer lang={lang} />
-          {loading ? <Spinner /> : null}
+    return (
+      <View style={firstPageStyles.pageView}>
+        <TouchableOpacity >
+          <View style={firstPageStyles.itemView}>
+            <Image source={require('./components/assets/images/iconTwo.png')} />
+            <Text style={firstPageStyles.seventhText}>تخطي </Text>
+
+
+          </View>
+        </TouchableOpacity>
+
+        <View style={firstPageStyles.firstView}>
+          <View style={firstPageStyles.secondView}>
+            <Image source={require('./components/assets/images/second.png')} />
+            <Text style={firstPageStyles.firstText}> أرفع طلبك </Text>
+            <Text style={firstPageStyles.secondText}>
+
+              {`هناك حقيقة مثبتة منذ زمن طويل وهي أن المحتوى
+           
+           
+          المقروء لصفحة ما سيلهي القارئ عن التركيز
+           
+           على الشكل الخارجي للنص`}
+            </Text>
+            <View style={firstPageStyles.view}>
+              <View style={firstPageStyles.roundedContainerOne}></View>
+              <View style={firstPageStyles.roundedContainerTwo}></View>
+              <View style={firstPageStyles.roundedContainerThree}></View>
+
+            </View>
+          </View>
+          <TouchableOpacity style={firstPageStyles.bottom}>
+            <View style={firstPageStyles.thirdView}>
+              <Text style={firstPageStyles.fifthText}>التالى</Text>
+            </View>
+            <View style={firstPageStyles.fourthView}>
+              <Image source={require('./components/assets/images/icon.png')} />
+              <Text style={firstPageStyles.sixthText}>السابق</Text>
+
+
+            </View>
+          </TouchableOpacity>
         </View>
-      );
-    } else {
-      return <View />;
-    }
+
+
+      </View>
+    );
   }
 }
-
 export default App;
